@@ -2,24 +2,26 @@
   "version": 2,
   "builds": [
     {
+      "src": "api/*.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "drizzle/**"
+      }
+    },
+    {
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist",
         "buildCommand": "npm run build"
       }
-    },
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": "drizzle/**",
-        "functions": {
-          "runtime": "nodejs18.x"
-        }
-      }
     }
   ],
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "routes": [
     {
       "src": "/api/(.*)",

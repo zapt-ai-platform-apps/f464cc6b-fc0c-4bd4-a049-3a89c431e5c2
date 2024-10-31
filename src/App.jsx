@@ -160,11 +160,11 @@ function App() {
   };
 
   return (
-    <div class="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 p-4">
+    <div class="h-full bg-gradient-to-br from-purple-100 to-blue-100 p-4">
       <Show
         when={currentPage() === 'homePage'}
         fallback={
-          <div class="flex items-center justify-center min-h-screen">
+          <div class="flex items-center justify-center h-full">
             <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-lg">
               <h2 class="text-3xl font-bold mb-6 text-center text-purple-600">Sign in with ZAPT</h2>
               <a
@@ -188,7 +188,7 @@ function App() {
           </div>
         }
       >
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-6xl mx-auto h-full">
           <div class="flex justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-purple-600">Joke Central</h1>
             <button
@@ -199,7 +199,7 @@ function App() {
             </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-full">
             <div class="col-span-1 md:col-span-2 lg:col-span-1">
               <h2 class="text-2xl font-bold mb-4 text-purple-600">Add New Joke</h2>
               <form onSubmit={saveJoke} class="space-y-4">
@@ -263,20 +263,18 @@ function App() {
               <div class="space-y-4">
                 <button
                   onClick={handleGenerateImage}
-                  class={`w-full px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={loading()}
+                  class={`w-full px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() || !newJoke().setup || !newJoke().punchline ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={loading() || !newJoke().setup || !newJoke().punchline}
                 >
                   {loading() ? 'Generating Image...' : 'Generate Image'}
                 </button>
-                <Show when={newJoke().setup && newJoke().punchline}>
-                  <button
-                    onClick={handleTextToSpeech}
-                    class={`w-full px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    disabled={loading()}
-                  >
-                    {loading() ? 'Converting Text...' : 'Text to Speech'}
-                  </button>
-                </Show>
+                <button
+                  onClick={handleTextToSpeech}
+                  class={`w-full px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() || !newJoke().setup || !newJoke().punchline ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={loading() || !newJoke().setup || !newJoke().punchline}
+                >
+                  {loading() ? 'Converting Text...' : 'Text to Speech'}
+                </button>
                 <button
                   onClick={handleMarkdownGeneration}
                   class={`w-full px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${loading() ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -305,7 +303,7 @@ function App() {
               <div>
                 <h3 class="text-xl font-bold mb-2 text-purple-600">Markdown Story</h3>
                 <div class="bg-white p-4 rounded-lg shadow-md">
-                  <SolidMarkdown children={markdownText()} />
+                  <SolidMarkdown>{markdownText()}</SolidMarkdown>
                 </div>
               </div>
             </Show>
